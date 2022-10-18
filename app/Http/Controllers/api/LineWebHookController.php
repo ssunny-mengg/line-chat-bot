@@ -77,11 +77,13 @@ class LineWebHookController extends Controller
         return "test";
     }
 
-    public function webhook(Request $request) {
+    public function webhook(Request $request)
+    {
+        Log::info($request);
+
         $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(env('LINE_CHANNEL_ACCESS_TOKEN'));
         $bot = new \LINE\LINEBot($httpClient, ['channelSecret' => env('LINE_CHANNEL_SECRET')]);
 
-        Log::info($request);
         foreach ($request['events'] as $event) {
             if ($event['message']['type'] == 'text' && $event['message']['text'] == 'give me 10 scores') {
                 $post = Post::inRandomOrder()->first();
